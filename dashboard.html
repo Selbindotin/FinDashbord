@@ -1,1 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Dashboard</title>
+  <style>
+    .metric { font-size: 24px; margin: 20px; }
+  </style>
+</head>
+<body>
+  <h2>Welcome <span id="userName"></span></h2>
+  <div class="metric">Net Worth: ₹<span id="netWorth"></span></div>
+  <div class="metric">Expenses: ₹<span id="expenses"></span></div>
+  <div class="metric">Income: ₹<span id="income"></span></div>
+  <div class="metric">Investments: ₹<span id="investment"></span></div>
+  <div class="metric">Loans: ₹<span id="loans"></span></div>
 
+  <script>
+    const API = 'https://script.google.com/macros/s/AKfycbznRM_qOjjRWuqntG-ShQQWUqSaAhNGqy-2B94gKJwIWUTQf_Q_gliQIwNhEUTr5NlY/exec';
+    const email = localStorage.getItem('email');
+    document.getElementById('userName').textContent = localStorage.getItem('name');
+
+    fetch(API, {
+      method: 'POST',
+      body: JSON.stringify({ action: 'getDashboard', email })
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.status === 'success') {
+        document.getElementById('netWorth').textContent = data.netWorth;
+        document.getElementById('expenses').textContent = data.expenses;
+        document.getElementById('income').textContent = data.income;
+        document.getElementById('investment').textContent = data.investment;
+        document.getElementById('loans').textContent = data.loans;
+      } else {
+        alert('Data fetch failed');
+      }
+    });
+  </script>
+</body>
+</html>
